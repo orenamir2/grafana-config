@@ -29,3 +29,14 @@ grafana:
 
   persistence:
     enabled: false
+
+prometheus:
+  prometheusSpec:
+    additionalScrapeConfigs:
+      - job_name: macbook-node-exporter
+        scrape_interval: 15s
+        static_configs:
+          - targets:
+              - "192.168.7.8:9100"
+            labels:
+              instance: "macbook"
