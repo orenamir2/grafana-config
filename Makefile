@@ -2,8 +2,11 @@ NAMESPACE ?= monitoring
 RELEASE ?= prometheus
 CHART ?= prometheus-community/kube-prometheus-stack
 CHART_VERSION ?= 87.15.1
+JSONNET ?= jsonnet
+JSONNET_DASHBOARD_SRC ?= jsonnet/dashboards/kubernetes-pod-health.jsonnet
+JSONNET_DASHBOARD_OUT ?= dashboards/kubernetes-pod-health-jsonnet.json
 
-.PHONY: status render diff apply helm-values helm-upgrade port-forward grafana-password
+.PHONY: status render diff apply dashboards-jsonnet jsonnet-check helm-values helm-upgrade port-forward grafana-password
 
 status:
 	kubectl -n $(NAMESPACE) get deploy/prometheus-grafana svc/prometheus-grafana
@@ -18,6 +21,13 @@ diff:
 
 apply:
 	kubectl apply -k .
+
+dashboards-jsonnet:
+	@if ! command -v $(JSONNET) >/dev/null 2>&1; then echo "jsonnet not found. Install jsonnet, or set JSONNET=/path/to/jsonnet."; exit 1; fi
+	$(JSONNET) -J jsonnet/lib -o $(JSONNET_DASHBOARD_OUT) $(JSONNET_DASHBOARD_SRC)
+
+jsonnet-check: dashboards-jsonnet
+	jq empty $(JSONNET_DASHBOARD_OUT)
 
 helm-values:
 	helm -n $(NAMESPACE) get values $(RELEASE)

@@ -29,6 +29,7 @@ new ConfigMaps generated from this repo.
 ```text
 dashboards/                         Raw Grafana dashboard JSON files
 dashboards/kustomization.yaml        Generates dashboard ConfigMaps with grafana_dashboard=1
+jsonnet/                            Jsonnet sources and local Grafana helpers
 datasources/                        Optional extra datasource provisioning files
 datasources/kustomization.yaml       Example generator for extra datasource ConfigMaps
 helm/kube-prometheus-stack-values.yaml
@@ -53,6 +54,25 @@ make apply
 
 Grafana's sidecar should pick up the ConfigMap and reload provisioning
 automatically.
+
+## Jsonnet Dashboard Workflow
+
+This repo includes a dependency-light Jsonnet example:
+
+- Source: `jsonnet/dashboards/kubernetes-pod-health.jsonnet`
+- Local helpers: `jsonnet/lib/grafana.libsonnet`
+- Rendered dashboard: `dashboards/kubernetes-pod-health-jsonnet.json`
+
+After installing a `jsonnet` binary, edit the source and render it:
+
+```sh
+make dashboards-jsonnet
+make render
+```
+
+The generated JSON is checked in because Grafana's sidecar loads ConfigMaps from
+plain dashboard JSON files. Keep editing the Jsonnet source, then regenerate the
+JSON before applying.
 
 ## Useful Commands
 

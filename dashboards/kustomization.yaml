@@ -16,3 +16,6 @@ configMapGenerator:
   - name: grafana-dashboard-kubernetes-quick-glance
     files:
       - kubernetes-quick-glance.json
+  - name: grafana-dashboard-kubernetes-pod-health-jsonnet
+    files:
+      - kubernetes-pod-health-jsonnet.json
