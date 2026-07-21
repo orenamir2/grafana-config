@@ -1,0 +1,31 @@
+# Minimal values that document the Grafana integration points currently used by
+# the installed kube-prometheus-stack release.
+#
+# Apply with:
+# helm -n monitoring upgrade prometheus prometheus-community/kube-prometheus-stack \
+#   --version 87.15.1 \
+#   -f helm/kube-prometheus-stack-values.yaml
+
+grafana:
+  enabled: true
+
+  sidecar:
+    dashboards:
+      enabled: true
+      label: grafana_dashboard
+      labelValue: "1"
+      searchNamespace: ALL
+      provider:
+        allowUiUpdates: false
+        disableDelete: false
+        folder: ""
+        foldersFromFilesStructure: false
+
+    datasources:
+      enabled: true
+      label: grafana_datasource
+      labelValue: "1"
+      searchNamespace: ALL
+
+  persistence:
+    enabled: false

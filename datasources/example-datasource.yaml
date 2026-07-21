@@ -1,0 +1,11 @@
+apiVersion: 1
+datasources:
+  - name: Example Prometheus
+    type: prometheus
+    uid: example-prometheus
+    url: http://example-prometheus.monitoring:9090/
+    access: proxy
+    isDefault: false
+    jsonData:
+      httpMethod: POST
+      timeInterval: 30s
